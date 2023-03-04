@@ -39,9 +39,9 @@ class Player(Car):
     def update(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            self.angle += 0.2 * self.speed
+            self.angle += 0.6 * self.speed
         if keys[pygame.K_RIGHT]:
-            self.angle -= 0.2 * self.speed
+            self.angle -= 0.6 * self.speed
         if keys[pygame.K_UP]:
             self.speed += 0.1
         if keys[pygame.K_DOWN]:
