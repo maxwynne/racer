@@ -8,25 +8,29 @@ def scale_image(img, factor):
     return pygame.transform.scale(img, size)
 
 # grass = scale_image(pygame.image.load("grass.jpg"), 2.5)
-# track = scale_image(pygame.image.load("track.jpg"), 0.82)
+# track = scale_image(pygame.image.load("track.png"), 0.82)
 # track_border = scale_image(pygame.image.load("track-border.jpg"), 0.9)
+
 
 pygame.display.set_caption("Racer")
 fps = 60
 clock = pygame.time.Clock()
 
 width = 1200
-height = 720
+height = 1000
 screen_size = (width, height)
 screen = pygame.display.set_mode(screen_size)
 
+# CAR = pygame.transform.scale(pygame.image.load(r"images/car.png"),
+#                              (50, 50)).convert_alpha()
 
 class Car:
     def __init__(self, x, y, angle):
         self.pos = Vector2(x,y)
         self.angle = angle
         self.speed = 0
-        self.image = pygame.image.load(r"C:\Users\tom80\OneDrive\Documents\tutoring\Max W\MaxPython2\racer\images\car.png")
+        self.image = pygame.image.load(r"images/car.png")
+
 
 class Player(Car):
     def __init__(self, x, y, angle):
@@ -51,6 +55,7 @@ class Player(Car):
 
     def draw(self):
         rotated_image = pygame.transform.rotate(self.image, self.angle)
+        self.image = pygame.transform.scale(self.image, (50, 30))
         # self.pos - Vector2(rotated_image.get_width(), rotated_image.get_height())/2
         screen.blit(rotated_image, (width//2 - rotated_image.get_width()//2, height//2 - rotated_image.get_height()//2))
 
@@ -69,12 +74,14 @@ class NPC(Car):
         rotated_image = pygame.transform.rotate(self.image, self.angle)
         bg_screen.blit(rotated_image, self.pos - Vector2(rotated_image.get_width(), rotated_image.get_height())/2)
 
+
 player = Player(200,300,0)
 npc = NPC(400, 400, 0)
 
-bg = pygame.image.load(r"C:\Users\tom80\OneDrive\Documents\tutoring\Max W\MaxPython2\racer\images\bg.png")
+bg = pygame.image.load(r"images/track.png")
+bg = pygame.transform.scale(bg, (1200, 1000))
 
-bg_screen = pygame.Surface(screen_size)#bg.get_size())
+bg_screen = pygame.Surface(screen_size) # bg.get_size())
 run = True
 while run:
     clock.tick(fps)
