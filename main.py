@@ -3,6 +3,7 @@ from pygame.math import Vector2
 import time
 import math
 
+
 def scale_image(img, factor):
     size = round(img.get_width() * factor), round(img.get_height() * factor)
     return pygame.transform.scale(img, size)
@@ -11,12 +12,6 @@ def scale_image(img, factor):
 # track = scale_image(pygame.image.load("track.png"), 0.82)
 # track_border = scale_image(pygame.image.load("track-border.jpg"), 0.9)
 
-# SPEED LIMIT
-MAX_SPEED = 3.0
-# ACCELERATION
-ACCELERATION_RATE = 0.1
-# FRICTION
-FRICTION = 0.02
 
 pygame.display.set_caption("Racer")
 fps = 60
@@ -39,8 +34,27 @@ class Car:
 
 
 class Player(Car):
-    def __init__(self, x, y, angle):
+    def __init__(self, x, y, angle, max_vel, rotation_vel):
         super().__init__(x, y, angle)
+        # IMG =
+        self.max_vel = max_vel
+        self.vel = 0
+        self.rotation_vel = rotation_vel
+        self.angle = 0
+
+    def rotate(self, left=False, right=False):
+        if left:
+            self.angle += self.rotation_vel
+        elif right:
+            self.angle -= self.rotation_vel
+
+    def blit_rotate_center(win, image, top_left, angle):
+        rotated_image = pygame.transform.rotate(image, angle)
+        new_rect = rotated_image.get_rect(center=image.get_rect(topLeft = top_left).center)
+        win.blit(rotated_image, new_rect.topleft)
+
+    def draw(self, win):
+        blit_rotate_center(win, self.img)
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -52,7 +66,7 @@ class Player(Car):
             self.speed += 0.1
         if keys[pygame.K_DOWN]:
             self.speed -= 0.2
-            if self.speed < 0:
+            if self.speed <= 0:
                 self.speed = 0
 
         dir = Vector2(math.cos(math.radians(self.angle)), math.sin(math.radians(-self.angle)))
