@@ -8,6 +8,13 @@ def scale_image(img, factor):
     size = round(img.get_width() * factor), round(img.get_height() * factor)
     return pygame.transform.scale(img, size)
 
+
+def blit_rotate_center(win, image, top_left, angle):
+    rotated_image = pygame.transform.rotate(image, image)
+    new_rect = rotated_image.get_rect(
+        center=image.get_rect(topleft=top_left).center)
+    win.blit(rotated_image, new_rect.topleft)
+
 # grass = scale_image(pygame.image.load("grass.jpg"), 2.5)
 # track = scale_image(pygame.image.load("track.png"), 0.82)
 # track_border = scale_image(pygame.image.load("track-border.jpg"), 0.9)
@@ -25,6 +32,7 @@ screen = pygame.display.set_mode(screen_size)
 # CAR = pygame.transform.scale(pygame.image.load(r"images/car.png"),
 #                              (50, 50)).convert_alpha()
 
+
 class Car:
     def __init__(self, x, y, angle):
         self.pos = Vector2(x,y)
@@ -34,27 +42,8 @@ class Car:
 
 
 class Player(Car):
-    def __init__(self, x, y, angle, max_vel, rotation_vel):
+    def __init__(self, x, y, angle):
         super().__init__(x, y, angle)
-        # IMG =
-        self.max_vel = max_vel
-        self.vel = 0
-        self.rotation_vel = rotation_vel
-        self.angle = 0
-
-    def rotate(self, left=False, right=False):
-        if left:
-            self.angle += self.rotation_vel
-        elif right:
-            self.angle -= self.rotation_vel
-
-    def blit_rotate_center(win, image, top_left, angle):
-        rotated_image = pygame.transform.rotate(image, angle)
-        new_rect = rotated_image.get_rect(center=image.get_rect(topLeft = top_left).center)
-        win.blit(rotated_image, new_rect.topleft)
-
-    def draw(self, win):
-        blit_rotate_center(win, self.img)
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -66,7 +55,7 @@ class Player(Car):
             self.speed += 0.1
         if keys[pygame.K_DOWN]:
             self.speed -= 0.2
-            if self.speed <= 0:
+            if self.speed < 0:
                 self.speed = 0
 
         dir = Vector2(math.cos(math.radians(self.angle)), math.sin(math.radians(-self.angle)))
@@ -79,6 +68,8 @@ class Player(Car):
         # self.pos - Vector2(rotated_image.get_width(), rotated_image.get_height())/2
         screen.blit(rotated_image, (width//2 - rotated_image.get_width()//2, height//2 - rotated_image.get_height()//2))
 
+    def blitRotateCenter(self, rotated_image = Player):
+        new_rect = rotated_image.get_rect(center = self.image.get_rect(center = (0, 0)).center)
 
 class NPC(Car):
     def __init__(self, x, y, angle):
