@@ -11,6 +11,12 @@ def scale_image(img, factor):
 # track = scale_image(pygame.image.load("track.png"), 0.82)
 # track_border = scale_image(pygame.image.load("track-border.jpg"), 0.9)
 
+# SPEED LIMIT
+MAX_SPEED = 3.0
+# ACCELERATION
+ACCELERATION_RATE = 0.1
+# FRICTION
+FRICTION = 0.02
 
 pygame.display.set_caption("Racer")
 fps = 60
